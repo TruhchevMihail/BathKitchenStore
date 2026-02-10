@@ -1,21 +1,62 @@
-{% extends 'base.html' %}
-{% block title %}{{ slug|title }} • Perfect Home Studio{% endblock %}
+{% extends "base.html" %}
+{% block title %}{{ project.title }} • Perfect Home Studio{% endblock %}
 
 {% block content %}
 <section class="page">
   <div class="container">
+
     <div class="breadcrumbs">
-      <a href="/projects/">← Back to projects</a>
+      <a href="{% url 'projects:projects_list' %}">← Back to projects</a>
     </div>
 
     <div class="page-head">
-      <h1>{{ slug|title }}</h1>
-      <p class="muted">TODO: full article + product blocks here.</p>
+      <h1>{{ project.title }}</h1>
+      <p class="muted">{{ project.get_section_display }}</p>
+      {% if project.short_description %}
+        <p class="muted">{{ project.short_description }}</p>
+      {% endif %}
     </div>
 
-    <div class="article">
-      <p class="muted">This is a placeholder. Later we’ll add rich content, images and related products.</p>
+    <div class="hero">
+      {% if project.cover_image %}
+        <img class="hero-img" src="{{ project.cover_image.url }}" alt="{{ project.title }}">
+      {% else %}
+        <div class="hero-placeholder">Cover image</div>
+      {% endif %}
     </div>
+
+    {% if project.content %}
+      <article class="prose">
+        {{ project.content|linebreaks }}
+      </article>
+    {% endif %}
+
+    {% if project.related_products.all %}
+      <div class="section-split">
+        <h2>Related products</h2>
+        <div class="product-grid">
+          {% for p in project.related_products.all %}
+            <div class="product-card">
+              <div class="product-media">
+                {% if p.image %}
+                  <img src="{{ p.image.url }}" alt="{{ p.title }}">
+                {% else %}
+                  <div class="media-placeholder">Product</div>
+                {% endif %}
+              </div>
+              <div class="product-body">
+                <div class="product-title">{{ p.title }}</div>
+                <div class="muted">{{ p.brand.name }} • {{ p.category.get_section_display }}</div>
+                <div class="product-meta">
+                  <span class="price">{{ p.price }}</span>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
   </div>
 </section>
 {% endblock %}

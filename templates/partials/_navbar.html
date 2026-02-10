@@ -1,12 +1,15 @@
+{% load static %}
+
+
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="/">Perfect Home Studio</a>
 
     <nav class="menu" aria-label="Main navigation">
-        <a class="menu-link" href="/bath/">Bath</a>
-        <a class="menu-link" href="/kitchen/">Kitchen</a>
-        <a class="menu-link" href="/catalogue/">Catalogue</a>
-        <a class="menu-link" href="/projects/">Projects</a>
+        <a class="menu-link" href="{% url 'bath_home' %}">Bath</a>
+        <a class="menu-link" href="{% url 'kitchen_home' %}">Kitchen</a>
+        <a class="menu-link" href="{% url 'brand_list' %}">Brands</a>
+        <a class="menu-link" href="{% url 'projects:projects_list' %}">Projects</a>
     </nav>
     <a class="cart" href="/cart/" aria-label="Cart">
         <span class="cart-icon">🛒</span>

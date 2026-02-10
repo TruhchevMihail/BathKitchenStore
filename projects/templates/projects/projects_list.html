@@ -1,13 +1,45 @@
-from django.shortcuts import render
+{% extends "base.html" %}
+{% block title %}Projects • Perfect Home Studio{% endblock %}
 
-def projects_list(request):
-    # TODO: load from DB
-    posts = [
-        {"slug": "modern-bathroom-ideas", "title": "Modern Bathroom Ideas", "excerpt": "Clean lines, matte black, warm tiles."},
-        {"slug": "small-kitchen-layout", "title": "Small Kitchen Layout", "excerpt": "Make space with smart storage."},
-        {"slug": "tile-selection-guide", "title": "Tile Selection Guide", "excerpt": "How to choose tiles for your home."},
-    ]
-    return render(request, "projects/projects_list.html", {"posts": posts})
+{% block content %}
+<section class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1>Projects</h1>
+      <p class="muted">Inspiration for bathrooms and kitchens.</p>
+    </div>
 
-def project_detail(request, slug):
-    return render(request, "projects/project_detail.html", {"slug": slug})
+    <div class="pillbar">
+      <a class="pill {% if not section %}is-active{% endif %}" href="{% url 'projects:projects_list' %}">All</a>
+      <a class="pill {% if section == 'bath' %}is-active{% endif %}" href="{% url 'projects:projects_list' %}?section=bath">Bath</a>
+      <a class="pill {% if section == 'kitchen' %}is-active{% endif %}" href="{% url 'projects:projects_list' %}?section=kitchen">Kitchen</a>
+    </div>
+
+    <div class="grid grid-3">
+      {% for p in projects %}
+        <a class="card card-link" href="{% url 'projects:project_detail' p.slug %}">
+          <div class="card-media">
+            {% if p.cover_image %}
+              <img src="{{ p.cover_image.url }}" alt="{{ p.title }}">
+            {% else %}
+              <div class="media-placeholder">Project</div>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="card-title">{{ p.title }}</div>
+            <div class="muted">{{ p.get_section_display }}</div>
+            {% if p.short_description %}
+              <div class="muted clamp-2">{{ p.short_description }}</div>
+            {% endif %}
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty">
+          <h3>No projects yet</h3>
+          <p class="muted">Add a few projects from the admin panel.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

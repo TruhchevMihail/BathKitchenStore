@@ -3,7 +3,15 @@ from django.utils.text import slugify
 from catalog.models import Product
 
 
-class ProjestPost(models.Model):
+class ProjectPost(models.Model):
+    BATH = "bath"
+    KITCHEN = "kitchen"
+
+    SECTION_CHOICES = [
+        (BATH, "Bath"),
+        (KITCHEN, "Kitchen"),
+    ]
+
     title = models.CharField(
         max_length=140,
     )
@@ -12,6 +20,11 @@ class ProjestPost(models.Model):
         max_length=160,
         unique=True,
         blank=True,
+    )
+
+    section = models.CharField(
+        max_length=10,
+        choices=SECTION_CHOICES
     )
 
     excerpt = models.CharField(
@@ -35,6 +48,10 @@ class ProjestPost(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+
+    def total_price(self):
+        return sum(p.price for p in self.related_products.all())
+
 
     class Meta:
         ordering = (

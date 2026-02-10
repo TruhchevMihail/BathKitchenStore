@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Brands • Perfect Home Studio{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container">
+    <div class="page-head">
+      <h1>Brands</h1>
+      <p class="muted">Browse all brands</p>
+    </div>
+
+    <div class="grid grid-4">
+      {% for b in brands %}
+        <a class="card card-link" href="{% url 'brand_detail' b.slug %}">
+          <div class="card-media card-media--brand">
+            {% if b.logo %}
+              <img src="{{ b.logo.url }}" alt="{{ b.name }}">
+            {% else %}
+              <div class="media-placeholder">Brand</div>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="card-title">{{ b.name }}</div>
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty">
+          <h3>No brands yet</h3>
+          <p class="muted">Add brands from the admin panel.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

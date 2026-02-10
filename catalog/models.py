@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, FileExtensionValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -15,14 +15,18 @@ class Brand(models.Model):
         unique=True,
         blank=True,
     )
-    logo_url = models.URLField(
+    logo = models.ImageField(
+        upload_to="brands/",
         blank=True,
+        null=True,
+        validators=[
+            validate_file_size_15mb,
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"]),
+        ],
     )
 
     class Meta:
-        ordering = (
-            'name',
-        )
+        ordering = ('name',)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -44,11 +48,9 @@ class Category(models.Model):
 
     title = models.CharField(
         max_length=50,
-        unique=True,
     )
     slug = models.SlugField(
         max_length=50,
-        unique=True,
         blank=True,
     )
     section = models.CharField(
@@ -61,10 +63,13 @@ class Category(models.Model):
     )
 
     category_image = models.ImageField(
-        upload_to='category_images/',
+        upload_to="categories/",
         blank=True,
         null=True,
-        validators=[validate_file_size_15mb]
+        validators=[
+            validate_file_size_15mb,
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"]),
+        ],
     )
 
     class Meta:
@@ -72,6 +77,11 @@ class Category(models.Model):
             "section",
             "title",
         )
+
+        constraints = [
+            models.UniqueConstraint(fields=["section", "title"], name="unique_category_title_per_section"),
+            models.UniqueConstraint(fields=["section", "slug"], name="unique_category_slug_per_section"),
+        ]
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -105,6 +115,11 @@ class Product(models.Model):
         blank=True,
     )
 
+    unique_id = models.CharField(
+        max_length=40,
+        unique=True,
+    )
+
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -119,8 +134,14 @@ class Product(models.Model):
         blank=True,
     )
 
-    image_url = models.URLField(
-        blank=True, #TODO add validation and MEDIA Upload
+    image = models.ImageField(
+        upload_to="products/",
+        blank=True,
+        null=True,
+        validators=[
+            validate_file_size_15mb,
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png", "webp"]),
+        ],
     )
 
     is_featured = models.BooleanField(
@@ -152,52 +173,3 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Section(models.Model):
-    name = models.CharField(max_length=20, unique=True)   # Bath / Kitchen
-    slug = models.SlugField(max_length=30, unique=True, blank=True)
-
-    class Meta:
-        ordering = ("name",)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-
-
-class SubCategory(models.Model):
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name="subcategories")
-    title = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=60, blank=True)
-    description = models.CharField(max_length=255, blank=True)
-
-    class Meta:
-        ordering = ("section", "title")
-        constraints = [
-            models.UniqueConstraint(fields=["section", "title"], name="unique_subcategory_per_section"),
-            models.UniqueConstraint(fields=["section", "slug"], name="unique_subcategory_slug_per_section"),
-        ]
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.section.name} * {self.title}"
-
-
-
-
-
-
-
-
-
-
-

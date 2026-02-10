@@ -5,17 +5,21 @@
 <section class="hero">
   <div class="container hero-inner">
     <div>
-      <h1>Bathroom & Kitchen Products</h1>
-      <p>Shop quality products and discover ideas for your perfect home.</p>
+      <h1>Designed for Comfort. Built to Last.</h1>
+      <p>At Perfect Home Studio, we offer premium bathroom and kitchen
+          products selected for their timeless design, superior quality,
+          and long-term reliability.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="/catalogue/">Browse Catalogue</a>
-        <a class="btn btn-ghost" href="/projects/">View Projects</a>
+        <a class="btn btn-primary" href="{% url 'brand_list' %}">Browse Brands</a>
+        <a class="btn btn-ghost" href="{% url 'projects:projects_list' %}">View Projects</a>
       </div>
     </div>
 
     <div class="hero-card">
-      <p class="card-title">Fast Delivery</p>
-      <p class="card-sub">Trusted brands • Great prices • Easy returns</p>
+      <p class="card-title">Fast & Reliable Delivery</p>
+      <p class="card-sub">Trusted brands • Competitive prices • Easy returns
+            Shop with confidence and receive your products quickly,
+          without compromising on quality.</p>
     </div>
   </div>
 </section>
@@ -47,6 +51,7 @@
   <div class="container">
     <div class="section-head">
       <h2 class="section-title">Best Sellers</h2>
+        <h3 class="section-subtitle">Our customers’ top choices — proven quality, stylish design, and everyday functionality.</h3>
     </div>
 
     <div class="product-grid five">
@@ -77,6 +82,7 @@
   <div class="container">
     <div class="section-head">
       <h2 class="section-title">New Arrivals</h2>
+        <h3 class="section-subtitle">Explore the latest trends in bathroom and kitchen design, featuring new models, fresh aesthetics, and innovative solutions.</h3>
     </div>
     <div class="product-grid five">
       {% for p in latest_products %}
