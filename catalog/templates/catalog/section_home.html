@@ -1,32 +1,36 @@
 {% extends 'base.html' %}
-{% block title %}Brands • Perfect Home Studio{% endblock %}
+{% block title %}{{ title }} • Perfect Home Studio{% endblock %}
 
 {% block content %}
 <section class="page">
   <div class="container">
     <div class="page-head">
-      <h1>Brands</h1>
-      <p class="muted">Browse all brands</p>
+      <h1>{{ title }}</h1>
+      <p class="muted">{{ subtitle }}</p>
     </div>
 
-    <div class="grid grid-4">
-      {% for b in brands %}
-        <a class="card card-link" href="{% url 'brand_detail' b.slug %}">
-          <div class="card-media card-media--brand">
-            {% if b.logo %}
-              <img src="{{ b.logo.url }}" alt="{{ b.name }}">
+    <div class="grid grid-3">
+      {% for c in categories %}
+        <a class="card card-link"
+           href="{% if section == 'bath' %}{% url 'bath_category' c.slug %}{% else %}{% url 'kitchen_category' c.slug %}{% endif %}">
+          <div class="card-media">
+            {% if c.category_image %}
+              <img src="{{ c.category_image.url }}" alt="{{ c.title }}">
             {% else %}
-              <div class="media-placeholder">Brand</div>
+              <div class="media-placeholder">Category</div>
             {% endif %}
           </div>
           <div class="card-body">
-            <div class="card-title">{{ b.name }}</div>
+            <div class="card-title">{{ c.title }}</div>
+            {% if c.description %}
+              <div class="muted clamp-2">{{ c.description }}</div>
+            {% endif %}
           </div>
         </a>
       {% empty %}
         <div class="empty">
-          <h3>No brands yet</h3>
-          <p class="muted">Add brands from the admin panel.</p>
+          <h3>No categories yet</h3>
+          <p class="muted">Add categories from the admin panel.</p>
         </div>
       {% endfor %}
     </div>
