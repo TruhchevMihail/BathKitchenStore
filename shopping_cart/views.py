@@ -163,7 +163,6 @@ def cart_checkout(request: HttpRequest) -> HttpResponse:
         })
 
     if request.method == "POST":
-        # session-based checkout: clear the cart and show success
         request.session[CART_SESSION_KEY] = {}
         _save_session(request.session)
         messages.success(request, "Checkout completed. Your cart has been cleared.")
