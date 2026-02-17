@@ -1,0 +1,70 @@
+{% load querystring %}
+
+
+{% if page_obj %}
+  <div class="pager-wrapper">
+
+    {# ---- RESULTS COUNT ---- #}
+    <div class="results-count muted">
+      {% if is_paginated %}
+        {{ page_obj.start_index }}–{{ page_obj.end_index }}
+        of {{ page_obj.paginator.count }} results
+      {% else %}
+        {{ page_obj.paginator.count }} results
+      {% endif %}
+    </div>
+
+    {# ---- PAGINATION ---- #}
+    {% if is_paginated %}
+      {% with qs=qs_no_page %}
+        <nav class="pager" aria-label="Pagination">
+
+          {# Prev arrow #}
+          {% if page_obj.has_previous %}
+            <a class="pager-arrow"
+               href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+               aria-label="Previous page">
+              ‹
+            </a>
+          {% else %}
+            <span class="pager-arrow pager-arrow--disabled" aria-label="Previous page">‹</span>
+          {% endif %}
+
+          <div class="pager-pages" aria-label="Page numbers">
+            {% for num in page_obj.paginator.page_range %}
+
+              {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}
+
+                {% if num == page_obj.number %}
+                  <span class="pager-page pager-page--active" aria-current="page">{{ num }}</span>
+                {% else %}
+                  <a class="pager-page"
+                     href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">
+                    {{ num }}
+                  </a>
+                {% endif %}
+
+              {% elif num == page_obj.number|add:-3 or num == page_obj.number|add:3 %}
+                <span class="pager-ellipsis">…</span>
+              {% endif %}
+
+            {% endfor %}
+          </div>
+
+          {# Next arrow #}
+          {% if page_obj.has_next %}
+            <a class="pager-arrow"
+               href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+               aria-label="Next page">
+              ›
+            </a>
+          {% else %}
+            <span class="pager-arrow pager-arrow--disabled" aria-label="Next page">›</span>
+          {% endif %}
+
+        </nav>
+      {% endwith %}
+    {% endif %}
+
+  </div>
+{% endif %}
