@@ -17,22 +17,18 @@
         </p>
       </div>
 
-      {% if user.is_staff %}
-        <div class="page-actions">
-          <a class="btn btn-primary" href="{% url 'category_create' %}">Create category</a>
-        </div>
-      {% endif %}
+      <div class="page-actions">
+        <a class="btn btn-primary" href="{% url 'category_create' %}">Create category</a>
+      </div>
     </div>
 
     <div class="grid grid-3">
       {% for c in categories %}
         <div class="card card-link category-card">
-          {% if user.is_staff %}
-            <div class="card-crud">
-              <a class="btn btn-sm btn-ghost" href="{% url 'category_edit' c.slug %}">Edit</a>
-              <a class="btn btn-sm btn-danger" href="{% url 'category_delete' c.slug %}">Delete</a>
-            </div>
-          {% endif %}
+          <div class="card-crud">
+            <a class="btn btn-sm btn-ghost" href="{% url 'category_edit' c.slug %}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="{% url 'category_delete' c.slug %}">Delete</a>
+          </div>
 
           <a class="category-link"
              href="{% if section == 'bath' %}{% url 'bath_category' c.slug %}{% else %}{% url 'kitchen_category' c.slug %}{% endif %}">
@@ -115,6 +111,8 @@
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
               <button class="btn btn-primary btn-sm" type="submit">Add to cart</button>
             </form>
+            <a class="btn btn-ghost btn-sm" href="{% url 'product_edit' p.slug %}">Edit</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'product_delete' p.slug %}">Delete</a>
           </div>
         </div>
       {% empty %}

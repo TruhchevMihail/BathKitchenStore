@@ -15,15 +15,22 @@
 
     <div class="grid grid-3">
       {% for c in categories %}
-        <a class="card card-link" href="{% url 'category_detail' c.slug %}">
-          <div class="card-body">
-            <div class="card-title">{{ c.title }}</div>
-            <div class="muted">{{ c.section }}</div>
-            {% if c.description %}
-              <div class="muted">{{ c.description }}</div>
-            {% endif %}
+        <div class="card card-link category-card">
+          <div class="card-crud">
+            <a class="btn btn-sm btn-ghost" href="{% url 'category_edit' c.slug %}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="{% url 'category_delete' c.slug %}">Delete</a>
           </div>
-        </a>
+
+          <a class="category-link" href="{% url 'category_detail' c.slug %}">
+            <div class="card-body">
+              <div class="card-title">{{ c.title }}</div>
+              <div class="muted">{{ c.get_section_display }}</div>
+              {% if c.description %}
+                <div class="muted">{{ c.description }}</div>
+              {% endif %}
+            </div>
+          </a>
+        </div>
       {% empty %}
         <div class="empty">
           <h3>No categories yet</h3>

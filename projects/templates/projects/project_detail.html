@@ -17,10 +17,8 @@
       </div>
 
       <div class="detail-actions">
-        {% if user.is_staff %}
-          <a class="btn btn-primary" href="{% url 'projects:project_edit' project.slug %}">Edit</a>
-          <a class="btn btn-danger" href="{% url 'projects:project_delete' project.slug %}">Delete</a>
-        {% endif %}
+        <a class="btn btn-primary" href="{% url 'projects:project_edit' project.slug %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'projects:project_delete' project.slug %}">Delete</a>
         <a class="btn btn-ghost" href="{% url 'projects:projects_list' %}">Back</a>
       </div>
     </div>

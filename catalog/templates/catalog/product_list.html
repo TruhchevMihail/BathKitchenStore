@@ -15,11 +15,9 @@
         {% endif %}
       </div>
 
-      {% if user.is_staff %}
-        <div class="page-actions">
-          <a class="btn btn-primary" href="{% url 'product_create' %}">Create product</a>
-        </div>
-      {% endif %}
+      <div class="page-actions">
+        <a class="btn btn-primary" href="{% url 'product_create' %}">Create product</a>
+      </div>
     </div>
 
     <div class="pillbar-wrapper">
@@ -125,6 +123,8 @@
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
               <button class="btn btn-primary btn-sm" type="submit">Add to cart</button>
             </form>
+            <a class="btn btn-ghost btn-sm" href="{% url 'product_edit' p.slug %}">Edit</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'product_delete' p.slug %}">Delete</a>
           </div>
 
         </div>

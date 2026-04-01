@@ -13,11 +13,9 @@
         <p class="muted">A curated collection from world leaders in interior design.</p>
       </div>
 
-      {% if user.is_staff %}
-        <div class="page-actions">
-          <a class="btn btn-primary" href="{% url 'brand_create' %}">Create brand</a>
-        </div>
-      {% endif %}
+      <div class="page-actions">
+        <a class="btn btn-primary" href="{% url 'brand_create' %}">Create brand</a>
+      </div>
     </div>
 
     <div class="pillbar-wrapper">
@@ -36,24 +34,31 @@
     
     <div class="grid grid-4">
       {% for b in brands %}
-        <a class="card card-link" href="{% url 'brand_detail' b.slug %}">
-
-          <div class="card-media card-media--brand">
-            {% if b.logo %}
-              <img src="{{ b.logo.url }}" alt="{{ b.name }}">
-            {% else %}
-              <div class="media-placeholder">Brand</div>
-            {% endif %}
+        <div class="card card-link brand-card">
+          <div class="card-crud">
+            <a class="btn btn-sm btn-ghost" href="{% url 'brand_edit' b.slug %}">Edit</a>
+            <a class="btn btn-sm btn-danger" href="{% url 'brand_delete' b.slug %}">Delete</a>
           </div>
 
-          <div class="card-body brand-card-body">
-            <div class="card-title brand-title">{{ b.name }}</div>
-            <div class="brand-count muted">
-              {{ b.products.count }} products
+          <a class="brand-link" href="{% url 'brand_detail' b.slug %}">
+
+            <div class="card-media card-media--brand">
+              {% if b.logo %}
+                <img src="{{ b.logo.url }}" alt="{{ b.name }}">
+              {% else %}
+                <div class="media-placeholder">Brand</div>
+              {% endif %}
             </div>
-          </div>
 
-        </a>
+            <div class="card-body brand-card-body">
+              <div class="card-title brand-title">{{ b.name }}</div>
+              <div class="brand-count muted">
+                {{ b.products.count }} products
+              </div>
+            </div>
+
+          </a>
+        </div>
       {% empty %}
         <div class="container">
           <div class="empty">
